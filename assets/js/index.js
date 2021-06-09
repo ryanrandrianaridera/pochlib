@@ -1,7 +1,7 @@
-// const NO_RESULTS_MSG = "Aucun livre n'a été trouvé.";
 const EMPTY_FIELDS_MSG = "Merci de remplir les deux champs proposés.";
+const NO_RESULTS_SEARCH_MSG = "Aucun livre n'a été trouvé.";
+const AVOID_DUPLICATES_MSG = "Livre déja existant dans votre poch'liste!";
 const NO_BOOK_INFO = "Information manquante";
-// const AVOID_DUPLICATES_MSG = "Vous ne pouvez ajouter deux fois le même livre !";
 
 class Book {
   constructor(title, idISBN, idItem, author, description, image) {
@@ -38,56 +38,98 @@ class Book {
 
     const titleElt = document.createElement("h3");
     titleElt.classList.add("result__info--title");
-    const idElt = document.createElement("h3");
-    const idHiddenElt = document.createElement("div");
-    idHiddenElt.style.display = "none";
+    const idIsbn = document.createElement("h3");
+    const idItem = document.createElement("div");
+    idItem.style.display = "none";
     const authorElt = document.createElement("p");
     const descriptionElt = document.createElement("p");
     const imageElt = document.createElement("img");
     imageElt.src = this.image;
     titleElt.innerHTML = "Titre : " + this.title;
-    idElt.innerHTML = "Id : " + this.idISBN;
-    idHiddenElt.innerHTML = this.idItem;
+    idIsbn.innerHTML = "Id : " + this.idISBN;
+    idItem.innerHTML = this.idItem;
     authorElt.innerHTML = "Auteur : " + this.author;
     descriptionElt.innerHTML = "Description : " + this.description;
     const bookInfoChildren = [
       iconBkmrk,
       iconTrash,
       titleElt,
-      idElt,
-      idHiddenElt,
+      idIsbn,
+      idItem,
       authorElt,
       descriptionElt,
     ];
     for (const child of bookInfoChildren) {
       bookInfo.appendChild(child);
     }
+
     imgWrapper.appendChild(imageElt);
     section.appendChild(bookInfo);
     section.appendChild(imgWrapper);
     parentElt.appendChild(section);
 
     iconBkmrk.addEventListener("click", (e) => {
+      event.preventDefault();
       addBookInPochlist(this);
     });
-    // iconTrash.addEventListener("click", (e) => {
-    //   removeBookInPochlist(this);
-    // });
+    iconTrash.addEventListener("click", (e) => {
+      event.preventDefault();
+      removeBookInPochlist(this);
+    });
   }
 }
 
+// function to create favicon
+
+function addFavIcon() {
+  let link = document.querySelector("link[rel~='icon']");
+  if (!link) {
+    link = document.createElement("link");
+    link.rel = "icon";
+    document.getElementsByTagName("head")[0].appendChild(link);
+  }
+  link.href = "./assets/img/logo/logo.png";
+}
+
+// function to check if idItem is already is in session
+
+// function isInSession(book) {
+//   if (sessionStorage.getItem(book) !== null) {
+//     alert(AVOID_DUPLICATES_MSG);
+//     return true;
+//   }
+//   return false;
+// }
 // add function to add book in pochlist
 
 function addBookInPochlist(book) {
+  const parentDiv = document.getElementById("pochlist-grid");
   let myBooks = JSON.parse(sessionStorage.getItem("myPochlist"));
 
   if (!myBooks) myBooks = {};
-
+  if (myBooks[book.idItem]) {
+    alert(AVOID_DUPLICATES_MSG);
+    return;
+  }
   myBooks[book.idItem] = book;
   sessionStorage.setItem("myPochlist", JSON.stringify(myBooks));
+  book.createBookPresentation(parentDiv);
 }
 
-// function removeBookInPochlist{book}
+function removeBookInPochlist(book) {
+  //   const eltTarget = document.getElementById("#pochlist-grid > section");
+  let myBooks = JSON.parse(sessionStorage.getItem("myPochlist"));
+  delete myBooks[book.idItem];
+  sessionStorage.setItem("myPochlist", JSON.stringify(myBooks));
+  const targetElt = document.querySelectorAll("#pochlist-grid > section");
+  targetElt.forEach((elt) => {
+    const targetId = elt.querySelector(".result__info > div");
+    if (targetId.innerHTML === book.idItem) {
+      elt.parentNode.removeChild(elt);
+      sessionStorage.removeItem(book.idItem);
+    }
+  });
+}
 
 // add function to insert new element with "myBooks" parent Div, and "hr" last target
 
@@ -120,6 +162,7 @@ function createForm() {
 
   const title = document.createElement("input");
   title.setAttribute("type", "text");
+  title.setAttribute("placeholder", "Entrer un titre");
   title.setAttribute("name", "intitle");
   title.setAttribute("id", "book-title");
   // title.setAttribute("required", "");
@@ -132,6 +175,7 @@ function createForm() {
 
   const author = document.createElement("input");
   author.setAttribute("type", "text");
+  author.setAttribute("placeholder", "Entrer un nom d'auteur");
   author.setAttribute("name", "inauthor");
   author.setAttribute("id", "author");
   // author.setAttribute("required", "");
@@ -257,9 +301,7 @@ function searchBook() {
       let response = JSON.parse(this.responseText);
       if (response.totalItems === 0) {
         resultsContainer.style.display = "none";
-        alert(
-          "Aucun livre n'a été trouvé, merci d'effectuer une nouvelle recherche"
-        );
+        alert(NO_RESULTS_SEARCH_MSG);
         // message.style.display = "block";
       } else {
         console.log("totalItems :" + response.totalItems);
@@ -271,13 +313,6 @@ function searchBook() {
       console.error(
         "Network request failed. Returned status of " + this.status
       );
-
-      // if (response.items.length > 0) {
-      //   response.items.forEach((book) => {
-      //     // creation d'un livre
-      //     createOneBook(book);
-      //   }
-      // }
     }
   };
 }
@@ -287,11 +322,6 @@ function cleanOutputList(parentElt) {
     parentElt.removeChild(parentElt.lastChild);
   }
 }
-
-// // function to create Book
-// function createOneBook(book) {
-//   console.log("createOneBook", book);
-// }
 
 function displayResults(data, list) {
   let item, title, id, idHidden, author, description, image;
@@ -355,6 +385,7 @@ function displayPochlist() {
         myBooks[idBook].description,
         myBooks[idBook].image
       );
+      console.log(idBook, myBooks);
       book.createBookPresentation(parentDiv);
     }
   }
@@ -380,6 +411,7 @@ function cancelSearch(form) {
 }
 
 function onload() {
+  addFavIcon();
   addButton();
   createForm();
   createResultsContainer();
