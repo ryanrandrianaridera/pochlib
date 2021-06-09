@@ -1,3 +1,5 @@
+$color-primary: #fff;
+
 * {
   font-family: "Roboto", sans-serif;
 }
@@ -7,6 +9,7 @@
 
 body {
 } */
+
 /* body > div {
 } */
 .logo {
@@ -47,23 +50,19 @@ h2 {
   background: #ccfffa;
   color: #1d9a8d;
 }
-
 .btn--cancel {
   background: #c94754;
   color: #fff;
   border: 0.1125rem solid #c94754;
 }
-
 .btn--cancel:hover {
   background: #ffccd1;
   color: #c94754;
 }
-
 .btn--center {
   margin-left: auto;
   margin-right: auto;
 }
-
 hr {
   width: 97%;
   color: grey;
@@ -76,19 +75,16 @@ hr {
   padding-top: 1.245rem;
   font-size: 1rem;
 }
-
 .form__field {
   margin-bottom: 1rem;
   font-size: inherit;
 }
-
 .form__field label {
   font-size: inherit;
   display: block;
   margin-bottom: 0.7rem;
   /* margin-top: -0.6225rem; */
 }
-
 .form__field input {
   font-size: inherit;
   padding: 1.5px;
@@ -115,28 +111,23 @@ hr {
   height: 350px;
   border: 0.075rem solid #cccccc;
 }
-
 .result__info h3 {
   font-size: 0.9rem;
 }
-
 .result__info p {
   font-size: 0.9rem;
 }
-
 .result__info--title {
   display: inline;
 }
-
 .result__img {
   margin-top: auto;
   overflow: hidden;
 }
-
 .result__img img {
   height: auto;
   width: 130px;
   display: block;
   margin-left: auto;
   margin-right: auto;
-}/*# sourceMappingURL=style.css.map */
+}
