@@ -1,79 +1,180 @@
-$color-primary: #fff;
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+
+// Defining colors
+$color-primary: #1d9a8d;
+$color-secondary: #c94754;
+$color-third: #eff0f4;
+$color-fourth: black;
+
+// Defining font-size
+$font-size: (
+  default: 0.9rem,
+  title: 1.8rem,
+  h2: 1.2rem,
+  form: 1rem,
+  icon: 1.2rem,
+);
+
+// Defining with size
+$with-size: (
+  default: 97%,
+  result: 90%,
+);
+
+@mixin hover_shadow {
+  box-shadow: 0 0 0.3em $color-primary;
+  transform: scale(1.05);
+}
+
+// Small tablets (portrait view)
+$screen-md: 768px;
+
+// Tablets and small desktops
+$screen-lg: 1200px;
+
+@mixin screen-md {
+  @media screen and (min-width: $screen-md) and (max-width: $screen-lg - 1) {
+    @content;
+  }
+}
+
+@mixin screen-lg {
+  @media screen and (min-width: $screen-lg) {
+    @content;
+  }
+}
+
+@mixin screen-md-lg {
+  @media (min-width: $screen-md) {
+    @content;
+  }
+}
+
+@mixin fullscreen {
+  margin: 0;
+  height: 100%;
+}
+
+// @mixin centered {
+//   margin-left: auto;
+//   margin-right: auto;
+// }
 
 * {
   font-family: "Roboto", sans-serif;
+  @include screen-md {
+    font-size: 105%;
+  }
+  @include screen-lg {
+    font-size: 110%;
+  }
 }
 
-/* html {
+html {
+  @include fullscreen;
 }
 
 body {
-} */
+  @include fullscreen;
+}
 
-/* body > div {
-} */
 .logo {
-  height: auto;
-  width: auto;
-  max-width: 200px;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
+  display: none;
+  @include screen-md-lg {
+    height: auto;
+    width: auto;
+    max-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
 }
 
 .title {
-  background-color: #f0eeee;
+  width: map-get($with-size, default);
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: $color-third;
+  border-radius: 5px / 5px;
   text-align: center;
-  font-size: 1.7rem;
-  color: grey;
+  font-size: 1.6rem;
+  color: rgb(90, 86, 86);
+  border-bottom-style: outset;
+  border-bottom-color: grey;
+  @include screen-md-lg {
+    margin-top: inherit;
+    font-size: map-get($font-size, title);
+  }
 }
 
 h2 {
+  width: map-get($with-size, default);
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
+  border-radius: 5px / 5px;
+  font-size: map-get($font-size, h2);
+  color: black;
 }
 
 .btn {
   padding: 4.5px 7.5px;
-  margin-bottom: 1.245rem;
-  border: 0.1125rem solid #1d9a8d;
+  margin-bottom: 1.3rem;
+  border: 0.1125rem solid $color-primary;
   width: 45%;
-  max-width: 115px;
+  max-width: 125px;
   color: #fff;
-  background: #1d9a8d;
-  font-size: 0.75rem;
+  background: $color-primary;
+  font-size: map-get($font-size, default);
   font-weight: bolder;
+  letter-spacing: auto;
+
   display: block;
   cursor: pointer;
+  border-radius: 10rem;
+  @include screen-md {
+    max-width: 130px;
+  }
+  @include screen-lg {
+    max-width: 150px;
+  }
+  transition: transform 300ms;
+  &:hover {
+    background: #ccfffa;
+    color: $color-primary;
+    @include hover_shadow;
+  }
 }
 
-.btn:hover {
-  background: #ccfffa;
-  color: #1d9a8d;
-}
 .btn--cancel {
-  background: #c94754;
+  background: $color-secondary;
   color: #fff;
-  border: 0.1125rem solid #c94754;
+  border: 0.1125rem solid #a09597;
+  transition: 0.3s;
+  &:hover {
+    background: #ffccd1;
+    color: $color-secondary;
+  }
 }
-.btn--cancel:hover {
-  background: #ffccd1;
-  color: #c94754;
-}
+
 .btn--center {
   margin-left: auto;
   margin-right: auto;
 }
 hr {
-  width: 97%;
+  width: map-get($with-size, default);
+  margin-left: auto;
+  margin-right: auto;
   color: grey;
 }
 
 .form {
-  width: 97%;
+  width: map-get($with-size, default);
   margin-left: auto;
   margin-right: auto;
   padding-top: 1.245rem;
-  font-size: 1rem;
+  font-size: map-get($font-size, form);
 }
 .form__field {
   margin-bottom: 1rem;
@@ -90,19 +191,48 @@ hr {
   padding: 1.5px;
   width: 100%;
   box-sizing: border-box;
-  border: 0.075rem solid #666666;
+  border: 0.075rem solid #1d1b1b;
+  border-radius: 5px / 5px;
+  &:focus {
+    background-color: $color-third;
+  }
 }
 
 .res-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.result {
-  width: 97%;
+  width: map-get($with-size, default);
   margin-left: auto;
   margin-right: auto;
-  background-color: #f2f2f2;
+  grid-template-columns: 1fr;
+  justify-content: space-around;
+  @include screen-md-lg {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include screen-lg {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.fas {
+  color: $color-primary;
+  padding-left: 15px;
+  font-size: map-get($font-size, icon);
+  display: inline;
+  float: right;
+  cursor: pointer;
+  opacity: 1;
+  transition: 0.3s;
+
+  &:hover {
+    color: $color-fourth;
+    opacity: 0.8;
+    transform: scale(1.15);
+  }
+}
+.result {
+  width: map-get($with-size, result);
+  margin: auto;
+  background-color: $color-third;
   padding: 7.5px;
   margin-bottom: 15px;
   display: flex;
@@ -110,12 +240,24 @@ hr {
   font-size: 0.75rem;
   height: 350px;
   border: 0.075rem solid #cccccc;
+  border-radius: 5px / 5px;
+  transition: 0.3s;
+  &:hover {
+    @include hover_shadow;
+    background: transparent;
+  }
+  @include screen-md {
+    height: 470px;
+  }
+  @include screen-lg {
+    height: 500px;
+  }
 }
 .result__info h3 {
-  font-size: 0.9rem;
+  font-size: map-get($font-size, default);
 }
 .result__info p {
-  font-size: 0.9rem;
+  font-size: map-get($font-size, default);
 }
 .result__info--title {
   display: inline;
@@ -126,8 +268,14 @@ hr {
 }
 .result__img img {
   height: auto;
-  width: 130px;
+  width: 125px;
   display: block;
   margin-left: auto;
   margin-right: auto;
+  @include screen-md {
+    width: 150px;
+  }
+  @include screen-lg {
+    width: 180px;
+  }
 }

@@ -1,7 +1,9 @@
 const EMPTY_FIELDS_MSG = "Merci de remplir les deux champs proposés.";
-const NO_RESULTS_SEARCH_MSG = "Aucun livre n'a été trouvé.";
-const AVOID_DUPLICATES_MSG = "Livre déja existant dans votre poch'liste!";
+const NO_RESULTS_SEARCH_MSG = "Aucun livre n'a été trouvé";
+const AVOID_DUPLICATES_MSG = "Vous ne pouvez ajouter deux fois le même livre";
 const NO_BOOK_INFO = "Information manquante";
+const ALERT_ADD_BOOK = "Est ajouté à votre Poch'list";
+const ALERT_REMOVE_BOOK = "Est retiré de votre Poch'list";
 
 class Book {
   constructor(title, idISBN, idItem, author, description, image) {
@@ -29,11 +31,13 @@ class Book {
     const iconBkmrk = document.createElement("i");
     iconBkmrk.classList.add("fas");
     iconBkmrk.classList.add("fa-bookmark");
+    iconBkmrk.setAttribute("title", "Ajouter ce livre dans ma poch'list");
     iconBkmrk.style.display = alreadyExist ? "none" : "block";
 
     const iconTrash = document.createElement("i");
     iconTrash.classList.add("fas");
     iconTrash.classList.add("fa-trash");
+    iconTrash.setAttribute("title", "Retirer ce livre de ma poch'list");
     iconTrash.style.display = alreadyExist ? "block" : "none";
 
     const titleElt = document.createElement("h3");
@@ -69,18 +73,40 @@ class Book {
     parentElt.appendChild(section);
 
     iconBkmrk.addEventListener("click", (e) => {
-      event.preventDefault();
+      e.preventDefault();
       addBookInPochlist(this);
+      iconBkmrk.style.display = "none";
+      iconTrash.style.display = "block";
+      // console.log(
+      //   "Titre : " +
+      //     this.title +
+      //     "\n" +
+      //     "Auteur : " +
+      //     this.author +
+      //     "\n" +
+      //     ALERT_ADD_BOOK
+      // );
     });
+
     iconTrash.addEventListener("click", (e) => {
-      event.preventDefault();
+      e.preventDefault();
       removeBookInPochlist(this);
+      iconBkmrk.style.display = "block";
+      iconTrash.style.display = "none";
+      // console.log(
+      //   "Titre : " +
+      //     this.title +
+      //     "\n" +
+      //     "Auteur : " +
+      //     this.author +
+      //     "\n" +
+      //     ALERT_REMOVE_BOOK
+      // );
     });
   }
 }
 
 // function to create favicon
-
 function addFavIcon() {
   let link = document.querySelector("link[rel~='icon']");
   if (!link) {
@@ -90,17 +116,6 @@ function addFavIcon() {
   }
   link.href = "./assets/img/logo/logo.png";
 }
-
-// function to check if idItem is already is in session
-
-// function isInSession(book) {
-//   if (sessionStorage.getItem(book) !== null) {
-//     alert(AVOID_DUPLICATES_MSG);
-//     return true;
-//   }
-//   return false;
-// }
-// add function to add book in pochlist
 
 function addBookInPochlist(book) {
   const parentDiv = document.getElementById("pochlist-grid");
@@ -117,7 +132,7 @@ function addBookInPochlist(book) {
 }
 
 function removeBookInPochlist(book) {
-  //   const eltTarget = document.getElementById("#pochlist-grid > section");
+  const parentDiv = document.getElementById("pochlist-grid");
   let myBooks = JSON.parse(sessionStorage.getItem("myPochlist"));
   delete myBooks[book.idItem];
   sessionStorage.setItem("myPochlist", JSON.stringify(myBooks));
@@ -126,13 +141,12 @@ function removeBookInPochlist(book) {
     const targetId = elt.querySelector(".result__info > div");
     if (targetId.innerHTML === book.idItem) {
       elt.parentNode.removeChild(elt);
-      sessionStorage.removeItem(book.idItem);
+      // sessionStorage.removeItem(book.idItem);
     }
   });
 }
 
 // add function to insert new element with "myBooks" parent Div, and "hr" last target
-
 function insertElement(elt) {
   const parentDiv = document.getElementById("myBooks");
   const target = document.getElementsByTagName("hr")[0];
@@ -140,7 +154,6 @@ function insertElement(elt) {
 }
 
 // function to create field
-
 function createField(label, input) {
   const field = document.createElement("div");
   field.classList.add("form__field");
@@ -150,7 +163,6 @@ function createField(label, input) {
 }
 
 // function to create form
-
 function createForm() {
   const form = document.createElement("form");
   form.classList.add("form");
@@ -165,8 +177,6 @@ function createForm() {
   title.setAttribute("placeholder", "Entrer un titre");
   title.setAttribute("name", "intitle");
   title.setAttribute("id", "book-title");
-  // title.setAttribute("required", "");
-  // title.setAttribute("pattern", "[A-Za-z]+");
 
   const labelAuthor = document.createElement("label");
   const labelAuthorTxt = document.createTextNode("Auteur");
@@ -178,37 +188,30 @@ function createForm() {
   author.setAttribute("placeholder", "Entrer un nom d'auteur");
   author.setAttribute("name", "inauthor");
   author.setAttribute("id", "author");
-  // author.setAttribute("required", "");
-
-  // const message = createWarningMessage("empty-fields-msg", EMPTY_FIELDS_MSG);
 
   const searchBtn = document.createElement("button");
   searchBtn.innerHTML = "Rechercher";
   searchBtn.classList.add("btn");
-  searchBtn.onclick = (event) => {
-    event.preventDefault();
+  searchBtn.onclick = (e) => {
+    e.preventDefault();
     if (title.value == "" || author.value == "") {
       alert(EMPTY_FIELDS_MSG);
     } else {
       searchBook();
-      //title.value = "Livre";
       title.focus();
-      //author.value = "Auteur";
     }
   };
 
   const dropBtn = document.createElement("button");
   dropBtn.innerHTML = "Annuler";
   dropBtn.classList.add("btn", "btn--cancel");
-  dropBtn.onclick = (event) => {
-    event.preventDefault();
+  dropBtn.onclick = (e) => {
+    e.preventDefault();
     cancelSearch(form);
-    // message.style.display = "none";
   };
 
   form.appendChild(createField(labelTitle, title));
   form.appendChild(createField(labelAuthor, author));
-  // form.appendChild(message);
   form.appendChild(searchBtn);
   form.appendChild(dropBtn);
   insertElement(form);
@@ -216,7 +219,6 @@ function createForm() {
 }
 
 // function to display form
-
 function displayForm() {
   const btn = document.getElementById("addBook");
   const form = document.getElementsByClassName("form")[0];
@@ -238,16 +240,6 @@ function addButton() {
   addBookBtn.onclick = displayForm;
 }
 
-// function to create message
-// function createWarningMessage(msgId, msg) {
-//   const message = document.createElement("div");
-//   message.id = msgId;
-//   message.classList.add("warning-msg");
-//   message.innerHTML = msg;
-//   message.style.display = "none";
-//   return message;
-// }
-
 // function to add result container
 function createResultsContainer() {
   const resultsContainer = document.createElement("div");
@@ -257,13 +249,11 @@ function createResultsContainer() {
   const resultsLine = document.createElement("hr");
   const resultsTitle = document.createElement("h2");
   resultsTitle.innerHTML = "Résultats de recherche";
-  // const warningMsg = createWarningMessage("no-results-msg", NO_RESULTS_MSG);
   const resultsGrid = document.createElement("div");
   resultsGrid.classList.add("res-grid");
   resultsGrid.id = "list-grid";
   resultsContainer.appendChild(resultsLine);
   resultsContainer.appendChild(resultsTitle);
-  // resultsContainer.appendChild(warningMsg);
   resultsContainer.appendChild(resultsGrid);
   insertElement(resultsContainer);
 }
@@ -281,9 +271,10 @@ function createPochlistContainer() {
 function searchBook() {
   const resultsContainer = document.getElementById("res-output");
   const listOutput = document.getElementById("list-grid");
-  // const message = document.getElementById("no-results-msg");
   let title = document.getElementById("book-title").value;
   let author = document.getElementById("author").value;
+  // order by Relevance or Newest
+  // let orderby = "&orderBy=Relevance"
   let request = new XMLHttpRequest();
   const url =
     "https://www.googleapis.com/books/v1/volumes?q=intitle:" +
@@ -300,13 +291,11 @@ function searchBook() {
     if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
       let response = JSON.parse(this.responseText);
       if (response.totalItems === 0) {
-        resultsContainer.style.display = "none";
+        resultsContainer.style.display = "block";
         alert(NO_RESULTS_SEARCH_MSG);
-        // message.style.display = "block";
       } else {
-        console.log("totalItems :" + response.totalItems);
+        //console.log("totalItems :" + response.totalItems);
         displayResults(response, listOutput);
-        // message.style.display = "none";
         resultsContainer.style.display = "block";
       }
     } else if (this.status !== 200) {
@@ -324,14 +313,14 @@ function cleanOutputList(parentElt) {
 }
 
 function displayResults(data, list) {
-  let item, title, id, idHidden, author, description, image;
+  let item, title, id, idItem, author, description, image;
   let books = [];
   // let index = 0;
   for (const [index, item] of data.items.entries()) {
-    console.log("i", index);
+    // console.log("i", index);
     id = null;
     title = item.volumeInfo.title;
-    idHidden = item.id;
+    idItem = item.id;
     if (item.volumeInfo.industryIdentifiers) {
       for (let i = 0; i < item.volumeInfo.industryIdentifiers.length; i++) {
         if (item.volumeInfo.industryIdentifiers[i].type === "ISBN_13") {
@@ -363,14 +352,14 @@ function displayResults(data, list) {
     image =
       item.volumeInfo?.imageLinks?.thumbnail || "./assets/img/unavailable.png";
 
-    books[index] = new Book(title, id, idHidden, author, description, image);
+    books[index] = new Book(title, id, idItem, author, description, image);
     books[index].createBookPresentation(list);
-    console.log(books[index]);
+    // console.log(books[index]);
     // index++;
   }
 }
-// function display pochlist
 
+// function display pochlist
 function displayPochlist() {
   const parentDiv = document.getElementById("pochlist-grid");
   const myBooks = JSON.parse(sessionStorage.getItem("myPochlist"));
@@ -385,7 +374,6 @@ function displayPochlist() {
         myBooks[idBook].description,
         myBooks[idBook].image
       );
-      console.log(idBook, myBooks);
       book.createBookPresentation(parentDiv);
     }
   }
