@@ -117,6 +117,7 @@ function addFavIcon() {
   link.href = "./assets/img/logo/logo.png";
 }
 
+//function to add a book in pochlist
 function addBookInPochlist(book) {
   const parentDiv = document.getElementById("pochlist-grid");
   let myBooks = JSON.parse(sessionStorage.getItem("myPochlist"));
@@ -131,6 +132,7 @@ function addBookInPochlist(book) {
   book.createBookPresentation(parentDiv);
 }
 
+//function to removea book in pochlist
 function removeBookInPochlist(book) {
   const parentDiv = document.getElementById("pochlist-grid");
   let myBooks = JSON.parse(sessionStorage.getItem("myPochlist"));
@@ -312,6 +314,7 @@ function cleanOutputList(parentElt) {
   }
 }
 
+//function dipsplay result
 function displayResults(data, list) {
   let item, title, id, idItem, author, description, image;
   let books = [];
