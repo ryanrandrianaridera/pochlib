@@ -223,7 +223,7 @@ function displayForm() {
   }
 }
 
-// function with button to add a book ans display form
+// function with button to add a book and display form
 function addButton() {
   const addBookBtn = document.createElement("button");
   addBookBtn.innerHTML = "Ajouter un livre";
@@ -266,8 +266,6 @@ function searchBook() {
   const listOutput = document.getElementById("list-grid");
   let title = document.getElementById("book-title").value;
   let author = document.getElementById("author").value;
-  // order by Relevance or Newest
-  // let orderby = "&orderBy=Relevance"
   let request = new XMLHttpRequest();
   const url =
     "https://www.googleapis.com/books/v1/volumes?q=intitle:" +

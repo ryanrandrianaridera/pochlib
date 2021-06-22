@@ -30,17 +30,27 @@ Poch’lib is a web responsive book management app developed with mobile first a
 
 About the installation.
 
-> Step 1 : Click on the top right button "code" and choose "Download zip".
+> Step 1 : Click on the top right button "code" [1] and choose "Download zip" [4].
 
 > Step 2 : On your computer, go to the folder downloaded.
 
 > Step 3 : Unzip the folder
 
+Other options are possible :
+
+[2] Clone the repository
+
+[3] Open with Github desktop
+
+<img src="./assets/img/tuto/install.jpg" alt="Poch'lib logo" width="700px">
+
 ## Execution
 
 ---
 
-Open the file **_"index.html"_** with your browser or open it with a local server ( ex : plugin Live Server + [Visual Studio Code](https://code.visualstudio.com/) ).
+Open the file downloaded and unzipped **_"index.html"_** with your browser or open it with a local server ( ex : plugin Live Server + [Visual Studio Code](https://code.visualstudio.com/) for example).
+
+It's possible to test directly this website online ==> [POCH'LIB APP ONLINE TEST](https://ryanrandrianaridera.github.io/pochlib/) <==
 
 ## Functionalities
 
@@ -76,10 +86,7 @@ When you closed your browser, everything is deleted.
 
 A list of technologies used within the project:
 
-<input type="checkbox" checked /> HTML5
-<input type="checkbox" checked /> CSS3
-<input type="checkbox" checked /> SASS
-<input type="checkbox" checked /> JAVASCRIPT
+<img src="./assets/img/techno/html5.png" alt="HTML5 logo"><img src="./assets/img/techno/css3.png" alt="CSS3 logo"><img src="./assets/img/techno/sass.png" alt="SASS logo" ><img src="./assets/img/techno/javascript.png" alt="JS logo">
 
 **Enjoy it !**
 
