@@ -2,8 +2,6 @@ const EMPTY_FIELDS_MSG = "Merci de remplir les deux champs proposés.";
 const NO_RESULTS_SEARCH_MSG = "Aucun livre n'a été trouvé";
 const AVOID_DUPLICATES_MSG = "Vous ne pouvez ajouter deux fois le même livre";
 const NO_BOOK_INFO = "Information manquante";
-const ALERT_ADD_BOOK = "Est ajouté à votre Poch'list";
-const ALERT_REMOVE_BOOK = "Est retiré de votre Poch'list";
 
 class Book {
   constructor(title, idISBN, idItem, author, description, image) {
@@ -17,12 +15,14 @@ class Book {
 
   createBookPresentation(parentElt) {
     const myBooks = JSON.parse(sessionStorage.getItem("myPochlist"));
-    const alreadyExist = myBooks
+    let alreadyExist = myBooks
       ? Object.keys(myBooks).includes(this.idItem)
       : false;
 
     const section = document.createElement("section");
+
     section.classList.add("result");
+    section.setAttribute("id", this.idItem);
     const bookInfo = document.createElement("div");
     bookInfo.classList.add("result__info");
     const imgWrapper = document.createElement("div");
@@ -77,31 +77,23 @@ class Book {
       addBookInPochlist(this);
       iconBkmrk.style.display = "none";
       iconTrash.style.display = "block";
-      // console.log(
-      //   "Titre : " +
-      //     this.title +
-      //     "\n" +
-      //     "Auteur : " +
-      //     this.author +
-      //     "\n" +
-      //     ALERT_ADD_BOOK
-      // );
     });
 
     iconTrash.addEventListener("click", (e) => {
       e.preventDefault();
       removeBookInPochlist(this);
-      iconBkmrk.style.display = "block";
-      iconTrash.style.display = "none";
-      // console.log(
-      //   "Titre : " +
-      //     this.title +
-      //     "\n" +
-      //     "Auteur : " +
-      //     this.author +
-      //     "\n" +
-      //     ALERT_REMOVE_BOOK
-      // );
+
+      let bookmark = document.querySelectorAll(
+        "#res-output #" + this.idItem + " .fa-bookmark"
+      );
+      let trash = document.querySelectorAll(
+        "#res-output #" + this.idItem + " .fa-trash"
+      );
+    
+      if (bookmark && trash) {
+        bookmark[0].style.display = "block";
+        trash[0].style.display = "none";
+      }
     });
   }
 }
@@ -132,7 +124,7 @@ function addBookInPochlist(book) {
   book.createBookPresentation(parentDiv);
 }
 
-//function to removea book in pochlist
+//function to remove a book in pochlist
 function removeBookInPochlist(book) {
   const parentDiv = document.getElementById("pochlist-grid");
   let myBooks = JSON.parse(sessionStorage.getItem("myPochlist"));
@@ -143,12 +135,11 @@ function removeBookInPochlist(book) {
     const targetId = elt.querySelector(".result__info > div");
     if (targetId.innerHTML === book.idItem) {
       elt.parentNode.removeChild(elt);
-      // sessionStorage.removeItem(book.idItem);
     }
   });
 }
 
-// add function to insert new element with "myBooks" parent Div, and "hr" last target
+// function to insert new element between "myBooks" parent Div, and "hr" last target
 function insertElement(elt) {
   const parentDiv = document.getElementById("myBooks");
   const target = document.getElementsByTagName("hr")[0];
@@ -164,7 +155,7 @@ function createField(label, input) {
   return field;
 }
 
-// function to create form
+// function to create form with validation
 function createForm() {
   const form = document.createElement("form");
   form.classList.add("form");
@@ -232,7 +223,7 @@ function displayForm() {
   }
 }
 
-// function to add button to add a book
+// function with button to add a book ans display form
 function addButton() {
   const addBookBtn = document.createElement("button");
   addBookBtn.innerHTML = "Ajouter un livre";
@@ -296,7 +287,6 @@ function searchBook() {
         resultsContainer.style.display = "block";
         alert(NO_RESULTS_SEARCH_MSG);
       } else {
-        //console.log("totalItems :" + response.totalItems);
         displayResults(response, listOutput);
         resultsContainer.style.display = "block";
       }
@@ -318,7 +308,6 @@ function cleanOutputList(parentElt) {
 function displayResults(data, list) {
   let item, title, id, idItem, author, description, image;
   let books = [];
-  // let index = 0;
   for (const [index, item] of data.items.entries()) {
     // console.log("i", index);
     id = null;
@@ -357,8 +346,6 @@ function displayResults(data, list) {
 
     books[index] = new Book(title, id, idItem, author, description, image);
     books[index].createBookPresentation(list);
-    // console.log(books[index]);
-    // index++;
   }
 }
 

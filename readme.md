@@ -40,7 +40,7 @@ About the installation.
 
 ---
 
-Open the file **_"index.html"_** with your browser or open it with a local server (ex : plugin Live Server + Visual Code)
+Open the file **_"index.html"_** with your browser or open it with a local server ( ex : plugin Live Server + [Visual Studio Code](https://code.visualstudio.com/) ).
 
 ## Functionalities
 

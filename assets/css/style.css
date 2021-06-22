@@ -170,7 +170,7 @@ hr {
 }
 @media screen and (min-width: 1200px) {
   .res-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -195,7 +195,7 @@ hr {
   margin: auto;
   background-color: #eff0f4;
   padding: 7.5px;
-  margin-bottom: 15px;
+  margin-bottom: 30px;
   display: flex;
   flex-direction: column;
   font-size: 0.75rem;
